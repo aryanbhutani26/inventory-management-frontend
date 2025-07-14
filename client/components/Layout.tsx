@@ -236,23 +236,28 @@ export default function Layout() {
           </div>
 
           {/* Navigation */}
-          <nav className="mt-6 px-4 flex-1">
-            <ul className="space-y-2">
-              {filteredNavigation.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    to={item.href}
-                    className={cn(
-                      "nav-link",
-                      location.pathname === item.href && "active",
-                    )}
-                  >
-                    <item.icon className="w-5 h-5" />
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <nav className="mt-8 px-4 flex-1">
+            <div className="mb-4">
+              <h3 className="text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wider px-3 mb-3">
+                Navigation
+              </h3>
+              <ul className="space-y-1">
+                {filteredNavigation.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      to={item.href}
+                      className={cn(
+                        "nav-link",
+                        location.pathname === item.href && "active",
+                      )}
+                    >
+                      <item.icon className="w-5 h-5 flex-shrink-0" />
+                      <span className="truncate">{item.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </nav>
 
           {/* User info */}
@@ -299,7 +304,7 @@ export default function Layout() {
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-64">
+      <div className="lg:pl-72">
         {/* Mobile header */}
         <div className="lg:hidden bg-card border-b border-border">
           <div className="flex h-16 items-center justify-between px-4">
