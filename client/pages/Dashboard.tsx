@@ -15,6 +15,8 @@ import {
   DollarSign,
   BarChart3,
   Calendar,
+  Sparkles,
+  Activity,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -92,22 +94,31 @@ export default function Dashboard() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground">
+        <div className="relative">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+              <BarChart3 className="w-5 h-5 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
+              Dashboard
+            </h1>
+            <Sparkles className="w-5 h-5 text-accent animate-pulse" />
+          </div>
+          <p className="text-muted-foreground flex items-center gap-2">
+            <Activity className="w-4 h-4" />
             Welcome back! Here's your transport management overview.
           </p>
         </div>
         <div className="flex gap-3">
-          <Button asChild className="bg-primary hover:bg-primary/90">
+          <Button asChild className="dashboard-action-btn group">
             <Link to="/transportation/new">
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform duration-300" />
               New Trip
             </Link>
           </Button>
-          <Button asChild variant="outline">
+          <Button asChild className="dashboard-secondary-btn group">
             <Link to="/inventory/new">
-              <Package className="w-4 h-4 mr-2" />
+              <Package className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
               Add Truck
             </Link>
           </Button>
