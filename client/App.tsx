@@ -34,16 +34,7 @@ function AppRoutes() {
           isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />
         }
       />
-      <Route
-        path="/"
-        element={
-          isAuthenticated ? (
-            <Navigate to="/dashboard" replace />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
+      <Route path="/" element={<LandingPage />} />
       <Route
         path="/*"
         element={
