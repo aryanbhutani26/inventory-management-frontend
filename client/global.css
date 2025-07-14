@@ -159,7 +159,12 @@
   }
 
   .nav-link.active {
-    @apply bg-gradient-to-r from-sidebar-primary to-sidebar-primary/90 text-sidebar-primary-foreground shadow-lg font-semibold border-l-4 border-sidebar-primary-foreground/30 relative;
+    background: linear-gradient(
+      to right,
+      hsl(var(--sidebar-primary)),
+      hsl(var(--sidebar-primary) / 0.9)
+    );
+    @apply text-sidebar-primary-foreground shadow-lg font-semibold border-l-4 border-sidebar-primary-foreground/30 relative;
   }
 
   .nav-link.active::after {
@@ -168,7 +173,12 @@
   }
 
   .sidebar-header {
-    @apply bg-gradient-to-r from-sidebar-background to-sidebar-accent border-b border-sidebar-border/50 backdrop-blur-sm;
+    background: linear-gradient(
+      to right,
+      hsl(var(--sidebar-background)),
+      hsl(var(--sidebar-accent))
+    );
+    @apply border-b border-sidebar-border/50 backdrop-blur-sm;
   }
 
   .sidebar-brand {
@@ -176,7 +186,12 @@
   }
 
   .user-avatar {
-    @apply bg-gradient-to-br from-sidebar-primary to-sidebar-primary/80 text-sidebar-primary-foreground font-bold shadow-md ring-2 ring-sidebar-primary/20;
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--sidebar-primary)),
+      hsl(var(--sidebar-primary) / 0.8)
+    );
+    @apply text-sidebar-primary-foreground font-bold shadow-md ring-2 ring-sidebar-primary/20;
   }
 
   .nav-section {
@@ -185,7 +200,13 @@
 
   .nav-section::before {
     content: "";
-    @apply absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-sidebar-primary/0 via-sidebar-primary/30 to-sidebar-primary/0 rounded-r-full opacity-0 transition-opacity duration-300;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      hsl(var(--sidebar-primary) / 0.3),
+      transparent
+    );
+    @apply absolute left-0 top-0 w-1 h-full rounded-r-full opacity-0 transition-opacity duration-300;
   }
 
   .nav-section:hover::before {
@@ -193,6 +214,7 @@
   }
 
   .sidebar-backdrop {
-    @apply backdrop-blur-md bg-sidebar-background/95 border-r border-sidebar-border/30;
+    background: hsl(var(--sidebar-background) / 0.95);
+    @apply backdrop-blur-md border-r border-sidebar-border/30;
   }
 }
