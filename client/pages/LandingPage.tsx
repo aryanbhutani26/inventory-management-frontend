@@ -183,7 +183,7 @@ export default function LandingPage() {
                 </div>
 
                 <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                  <span className="block text-foreground">
+                  <span className="block text-white">
                     Revolutionize Your
                   </span>
                   <span className="block bg-gradient-to-r from-primary via-accent to-success bg-clip-text text-transparent">
@@ -530,7 +530,7 @@ export default function LandingPage() {
             <Button
               variant="outline"
               size="lg"
-              className="text-lg px-8 py-6 border-white text-white hover:bg-white/10"
+              className="text-lg px-8 py-6 border-white text-black hover:bg-white/10"
             >
               Schedule Demo
               <Clock className="w-5 h-5 ml-2" />
@@ -542,7 +542,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer
         id="contact"
-        className="bg-sidebar-background text-sidebar-foreground"
+        className="bg-sidebar-background text-black"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -550,25 +550,25 @@ export default function LandingPage() {
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                  <Truck className="w-5 h-5 text-white" />
+                  <Truck className="w-5 h-5 text-black" />
                 </div>
                 <span className="text-xl font-bold">TransportPro</span>
               </div>
-              <p className="text-sidebar-foreground/80">
+              <p className="text-black">
                 Professional transport management system designed to help
                 businesses scale efficiently and boost profitability.
               </p>
               <div className="flex space-x-4">
-                <div className="w-8 h-8 rounded-lg bg-sidebar-accent flex items-center justify-center hover:bg-primary cursor-pointer transition-colors">
+                <div className="w-8 h-8 rounded-lg  flex items-center justify-center hover:bg-primary cursor-pointer transition-colors">
                   <Facebook className="w-4 h-4" />
                 </div>
-                <div className="w-8 h-8 rounded-lg bg-sidebar-accent flex items-center justify-center hover:bg-primary cursor-pointer transition-colors">
-                  <Twitter className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg  flex items-center justify-center hover:bg-primary cursor-pointer transition-colors">
+                  <Twitter className="w-4 h-4 " />
                 </div>
-                <div className="w-8 h-8 rounded-lg bg-sidebar-accent flex items-center justify-center hover:bg-primary cursor-pointer transition-colors">
+                <div className="w-8 h-8 rounded-lg  flex items-center justify-center hover:bg-primary cursor-pointer transition-colors">
                   <Instagram className="w-4 h-4" />
                 </div>
-                <div className="w-8 h-8 rounded-lg bg-sidebar-accent flex items-center justify-center hover:bg-primary cursor-pointer transition-colors">
+                <div className="w-8 h-8 rounded-lg  flex items-center justify-center hover:bg-primary cursor-pointer transition-colors">
                   <Linkedin className="w-4 h-4" />
                 </div>
               </div>
@@ -580,25 +580,25 @@ export default function LandingPage() {
               <div className="space-y-2">
                 <a
                   href="#features"
-                  className="block text-sidebar-foreground/80 hover:text-sidebar-foreground transition-colors"
+                  className="block text-black hover:text-sidebar-foreground transition-colors"
                 >
                   Features
                 </a>
                 <a
                   href="#"
-                  className="block text-sidebar-foreground/80 hover:text-sidebar-foreground transition-colors"
+                  className="block text-black hover:text-sidebar-foreground transition-colors"
                 >
                   Pricing
                 </a>
                 <a
                   href="#"
-                  className="block text-sidebar-foreground/80 hover:text-sidebar-foreground transition-colors"
+                  className="block text-black hover:text-sidebar-foreground transition-colors"
                 >
                   API Documentation
                 </a>
                 <a
                   href="#"
-                  className="block text-sidebar-foreground/80 hover:text-sidebar-foreground transition-colors"
+                  className="block text-black hover:text-sidebar-foreground transition-colors"
                 >
                   Integrations
                 </a>
@@ -611,25 +611,25 @@ export default function LandingPage() {
               <div className="space-y-2">
                 <a
                   href="#"
-                  className="block text-sidebar-foreground/80 hover:text-sidebar-foreground transition-colors"
+                  className="block text-black hover:text-sidebar-foreground transition-colors"
                 >
                   Help Center
                 </a>
                 <a
                   href="#"
-                  className="block text-sidebar-foreground/80 hover:text-sidebar-foreground transition-colors"
+                  className="block text-black hover:text-sidebar-foreground transition-colors"
                 >
                   Contact Support
                 </a>
                 <a
                   href="#"
-                  className="block text-sidebar-foreground/80 hover:text-sidebar-foreground transition-colors"
+                  className="block text-black hover:text-sidebar-foreground transition-colors"
                 >
                   System Status
                 </a>
                 <a
                   href="#"
-                  className="block text-sidebar-foreground/80 hover:text-sidebar-foreground transition-colors"
+                  className="block text-black hover:text-sidebar-foreground transition-colors"
                 >
                   Bug Reports
                 </a>
@@ -642,19 +642,19 @@ export default function LandingPage() {
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-primary" />
-                  <span className="text-sidebar-foreground/80">
+                  <span className="text-black">
                     support@transportpro.com
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-primary" />
-                  <span className="text-sidebar-foreground/80">
+                  <span className="text-black">
                     +91 98765 43210
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <LocationIcon className="w-4 h-4 text-primary" />
-                  <span className="text-sidebar-foreground/80">
+                  <span className="text-black">
                     Mumbai, Maharashtra, India
                   </span>
                 </div>
@@ -664,25 +664,25 @@ export default function LandingPage() {
 
           <div className="border-t border-sidebar-border mt-12 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <div className="text-sidebar-foreground/60">
+              <div className="text-black">
                 © 2024 TransportPro. All rights reserved.
               </div>
               <div className="flex space-x-6 mt-4 md:mt-0">
                 <a
                   href="#"
-                  className="text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors"
+                  className="text-black hover:text-sidebar-foreground transition-colors"
                 >
                   Privacy Policy
                 </a>
                 <a
                   href="#"
-                  className="text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors"
+                  className="text-black  hover:text-sidebar-foreground transition-colors"
                 >
                   Terms of Service
                 </a>
                 <a
                   href="#"
-                  className="text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors"
+                  className="text-black hover:text-sidebar-foreground transition-colors"
                 >
                   Cookie Policy
                 </a>

@@ -80,7 +80,7 @@ export default function Login() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent mb-3">
               TransportPro
             </h1>
-            <p className="text-muted-foreground text-lg font-medium">
+            <p className="text-black text-lg font-medium">
               Professional Transport Management System
             </p>
           </div>
