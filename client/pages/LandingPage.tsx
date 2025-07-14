@@ -28,7 +28,7 @@ import {
   Facebook,
   Twitter,
   Instagram,
-  LinkedIn,
+  Linkedin,
   Sparkles,
 } from "lucide-react";
 
