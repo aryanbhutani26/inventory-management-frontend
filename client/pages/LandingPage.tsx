@@ -569,7 +569,7 @@ export default function LandingPage() {
                   <Instagram className="w-4 h-4" />
                 </div>
                 <div className="w-8 h-8 rounded-lg bg-sidebar-accent flex items-center justify-center hover:bg-primary cursor-pointer transition-colors">
-                  <LinkedIn className="w-4 h-4" />
+                  <Linkedin className="w-4 h-4" />
                 </div>
               </div>
             </div>
