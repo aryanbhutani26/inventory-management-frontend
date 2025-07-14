@@ -124,4 +124,358 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
     }
 
     const totalTrips = filteredTrips.length;
-    const completedTrips = filteredTrips.filter(\n      (trip) => trip.status === \"completed\",\n    ).length;\n    const totalRevenue = filteredTrips.reduce(\n      (sum, trip) => sum + trip.revenue,\n      0,\n    );\n    const totalExpenses = filteredTrips.reduce(\n      (sum, trip) =>\n        sum +\n        trip.expenses.diesel +\n        trip.expenses.toll +\n        trip.expenses.driver +\n        trip.expenses.other,\n      0,\n    );\n    const totalProfit = filteredTrips.reduce(\n      (sum, trip) => sum + trip.profit,\n      0,\n    );\n    const averageProfitPerTrip = totalTrips > 0 ? totalProfit / totalTrips : 0;\n\n    // Top performing trucks\n    const truckPerformance = new Map<string, { trips: number; profit: number }>();\n    filteredTrips.forEach((trip) => {\n      const current = truckPerformance.get(trip.truckRegistration) || {\n        trips: 0,\n        profit: 0,\n      };\n      truckPerformance.set(trip.truckRegistration, {\n        trips: current.trips + 1,\n        profit: current.profit + trip.profit,\n      });\n    });\n\n    const topPerformingTrucks = Array.from(truckPerformance.entries())\n      .map(([truckId, data]) => ({ truckId, ...data }))\n      .sort((a, b) => b.profit - a.profit)\n      .slice(0, 5);\n\n    // Monthly data\n    const monthlyData = new Map<string, { trips: number; revenue: number; profit: number }>();\n    filteredTrips.forEach((trip) => {\n      const month = new Date(trip.startDate).toISOString().substring(0, 7);\n      const current = monthlyData.get(month) || { trips: 0, revenue: 0, profit: 0 };\n      monthlyData.set(month, {\n        trips: current.trips + 1,\n        revenue: current.revenue + trip.revenue,\n        profit: current.profit + trip.profit,\n      });\n    });\n\n    const monthlyDataArray = Array.from(monthlyData.entries())\n      .map(([month, data]) => ({ month, ...data }))\n      .sort((a, b) => a.month.localeCompare(b.month));\n\n    // Expense breakdown\n    const expenseBreakdown = filteredTrips.reduce(\n      (acc, trip) => ({\n        diesel: acc.diesel + trip.expenses.diesel,\n        toll: acc.toll + trip.expenses.toll,\n        driver: acc.driver + trip.expenses.driver,\n        other: acc.other + trip.expenses.other,\n      }),\n      { diesel: 0, toll: 0, driver: 0, other: 0 },\n    );\n\n    return {\n      totalTrips,\n      completedTrips,\n      totalRevenue,\n      totalExpenses,\n      totalProfit,\n      averageProfitPerTrip,\n      topPerformingTrucks,\n      monthlyData: monthlyDataArray,\n      expenseBreakdown,\n    };\n  };\n\n  const generateInventoryReport = (filter?: ReportFilter): InventoryReport => {\n    let filteredTrucks = trucks;\n\n    if (filter) {\n      filteredTrucks = trucks.filter((truck) => {\n        const matchesDate =\n          (!filter.dateFrom ||\n            new Date(truck.purchaseDate) >= new Date(filter.dateFrom)) &&\n          (!filter.dateTo ||\n            new Date(truck.purchaseDate) <= new Date(filter.dateTo));\n        const matchesStatus = !filter.status || truck.status === filter.status;\n        return matchesDate && matchesStatus;\n      });\n    }\n\n    const totalTrucks = filteredTrucks.length;\n    const soldTrucks = filteredTrucks.filter(\n      (truck) => truck.status === \"sold\",\n    ).length;\n    const availableTrucks = filteredTrucks.filter(\n      (truck) => truck.status === \"available\",\n    ).length;\n    const pendingNOCs = filteredTrucks.filter(\n      (truck) => truck.nocApplied && !truck.nocReceivedDate,\n    ).length;\n\n    const totalInvestment = filteredTrucks.reduce((sum, truck) => {\n      const expenses = Object.values(truck.expenses).reduce(\n        (expSum, exp) => expSum + exp,\n        0,\n      );\n      return sum + truck.fullPurchaseAmount + expenses;\n    }, 0);\n\n    const soldTrucksList = filteredTrucks.filter(\n      (truck) => truck.status === \"sold\" && truck.saleDetails,\n    );\n    const totalSalesRevenue = soldTrucksList.reduce(\n      (sum, truck) => sum + (truck.saleDetails?.saleAmount || 0),\n      0,\n    );\n    const totalProfit = soldTrucksList.reduce(\n      (sum, truck) => sum + (truck.profit || 0),\n      0,\n    );\n    const averageProfitPerTruck =\n      soldTrucks > 0 ? totalProfit / soldTrucks : 0;\n\n    // Top selling models\n    const modelPerformance = new Map<string, { count: number; profit: number }>();\n    soldTrucksList.forEach((truck) => {\n      const current = modelPerformance.get(truck.model) || {\n        count: 0,\n        profit: 0,\n      };\n      modelPerformance.set(truck.model, {\n        count: current.count + 1,\n        profit: current.profit + (truck.profit || 0),\n      });\n    });\n\n    const topSellingModels = Array.from(modelPerformance.entries())\n      .map(([model, data]) => ({ model, ...data }))\n      .sort((a, b) => b.profit - a.profit)\n      .slice(0, 5);\n\n    // Monthly purchases\n    const monthlyPurchases = new Map<string, { purchases: number; investment: number }>();\n    filteredTrucks.forEach((truck) => {\n      const month = new Date(truck.purchaseDate).toISOString().substring(0, 7);\n      const current = monthlyPurchases.get(month) || {\n        purchases: 0,\n        investment: 0,\n      };\n      const expenses = Object.values(truck.expenses).reduce(\n        (sum, exp) => sum + exp,\n        0,\n      );\n      monthlyPurchases.set(month, {\n        purchases: current.purchases + 1,\n        investment: current.investment + truck.fullPurchaseAmount + expenses,\n      });\n    });\n\n    const monthlyPurchasesArray = Array.from(monthlyPurchases.entries())\n      .map(([month, data]) => ({ month, ...data }))\n      .sort((a, b) => a.month.localeCompare(b.month));\n\n    // Monthly sales\n    const monthlySales = new Map<\n      string,\n      { sales: number; revenue: number; profit: number }\n    >();\n    soldTrucksList.forEach((truck) => {\n      if (truck.saleDetails) {\n        const month = new Date(truck.saleDetails.saleDate)\n          .toISOString()\n          .substring(0, 7);\n        const current = monthlySales.get(month) || {\n          sales: 0,\n          revenue: 0,\n          profit: 0,\n        };\n        monthlySales.set(month, {\n          sales: current.sales + 1,\n          revenue: current.revenue + truck.saleDetails.saleAmount,\n          profit: current.profit + (truck.profit || 0),\n        });\n      }\n    });\n\n    const monthlySalesArray = Array.from(monthlySales.entries())\n      .map(([month, data]) => ({ month, ...data }))\n      .sort((a, b) => a.month.localeCompare(b.month));\n\n    // Expense breakdown\n    const expenseBreakdown = filteredTrucks.reduce(\n      (acc, truck) => ({\n        transportation: acc.transportation + truck.expenses.transportation,\n        bodyWork: acc.bodyWork + truck.expenses.bodyWork,\n        kamaniWork: acc.kamaniWork + truck.expenses.kamaniWork,\n        tyre: acc.tyre + truck.expenses.tyre,\n        paint: acc.paint + truck.expenses.paint,\n        insurance: acc.insurance + truck.expenses.insurance,\n        other:\n          acc.other +\n          truck.expenses.driver +\n          truck.expenses.diesel +\n          truck.expenses.toll +\n          truck.expenses.floor +\n          truck.expenses.fatta +\n          truck.expenses.builty,\n      }),\n      {\n        transportation: 0,\n        bodyWork: 0,\n        kamaniWork: 0,\n        tyre: 0,\n        paint: 0,\n        insurance: 0,\n        other: 0,\n      },\n    );\n\n    return {\n      totalTrucks,\n      soldTrucks,\n      availableTrucks,\n      totalInvestment,\n      totalSalesRevenue,\n      totalProfit,\n      averageProfitPerTruck,\n      pendingNOCs,\n      topSellingModels,\n      monthlyPurchases: monthlyPurchasesArray,\n      monthlySales: monthlySalesArray,\n      expenseBreakdown,\n    };\n  };\n\n  const getDashboardMetrics = (): DashboardMetrics => {\n    const transportReport = generateTransportReport();\n    const inventoryReport = generateInventoryReport();\n\n    const totalRevenue = transportReport.totalRevenue + inventoryReport.totalSalesRevenue;\n    const totalProfit = transportReport.totalProfit + inventoryReport.totalProfit;\n    const roi = inventoryReport.totalInvestment > 0 \n      ? (totalProfit / inventoryReport.totalInvestment) * 100 \n      : 0;\n\n    return {\n      transportMetrics: {\n        totalTrips: transportReport.totalTrips,\n        activeTrips: trips.filter(\n          (trip) => trip.status === \"in-transit\" || trip.status === \"planned\",\n        ).length,\n        monthlyProfit: transportReport.monthlyData\n          .filter(\n            (data) =>\n              data.month ===\n              new Date().toISOString().substring(0, 7),\n          )\n          .reduce((sum, data) => sum + data.profit, 0),\n        totalRevenue: transportReport.totalRevenue,\n      },\n      inventoryMetrics: {\n        totalTrucks: inventoryReport.totalTrucks,\n        soldTrucks: inventoryReport.soldTrucks,\n        pendingNOCs: inventoryReport.pendingNOCs,\n        totalProfit: inventoryReport.totalProfit,\n      },\n      overallMetrics: {\n        totalProfit,\n        totalRevenue,\n        totalInvestment: inventoryReport.totalInvestment,\n        roi,\n      },\n    };\n  };\n\n  const exportToPDF = (reportType: \"transport\" | \"inventory\", data: any) => {\n    // Mock PDF export - in real implementation, use libraries like jsPDF\n    console.log(`Exporting ${reportType} report to PDF:`, data);\n    alert(`PDF export feature will be implemented. Report data logged to console.`);\n  };\n\n  const exportToCSV = (reportType: \"transport\" | \"inventory\", data: any) => {\n    // Mock CSV export - in real implementation, convert data to CSV format\n    console.log(`Exporting ${reportType} report to CSV:`, data);\n    \n    let csvContent = \"\";\n    \n    if (reportType === \"transport\") {\n      csvContent = \"Trip ID,Truck,Source,Destination,Start Date,Revenue,Profit,Status\\n\";\n      trips.forEach((trip) => {\n        csvContent += `${trip.id},${trip.truckRegistration},${trip.source},${trip.destination},${trip.startDate},${trip.revenue},${trip.profit},${trip.status}\\n`;\n      });\n    } else {\n      csvContent = \"Truck ID,Registration,Model,Purchase Date,Purchase Amount,Status,Profit\\n\";\n      trucks.forEach((truck) => {\n        csvContent += `${truck.id},${truck.registrationNumber},${truck.model},${truck.purchaseDate},${truck.fullPurchaseAmount},${truck.status},${truck.profit || 0}\\n`;\n      });\n    }\n    \n    const blob = new Blob([csvContent], { type: \"text/csv;charset=utf-8;\" });\n    const link = document.createElement(\"a\");\n    const url = URL.createObjectURL(blob);\n    link.setAttribute(\"href\", url);\n    link.setAttribute(\"download\", `${reportType}_report.csv`);\n    link.style.visibility = \"hidden\";\n    document.body.appendChild(link);\n    link.click();\n    document.body.removeChild(link);\n  };\n\n  const value = {\n    generateTransportReport,\n    generateInventoryReport,\n    getDashboardMetrics,\n    exportToPDF,\n    exportToCSV,\n  };\n\n  return (\n    <ReportsContext.Provider value={value}>{children}</ReportsContext.Provider>\n  );\n}\n\nexport function useReports() {\n  const context = useContext(ReportsContext);\n  if (context === undefined) {\n    throw new Error(\"useReports must be used within a ReportsProvider\");\n  }\n  return context;\n}\n
+    const completedTrips = filteredTrips.filter(
+      (trip) => trip.status === "completed",
+    ).length;
+    const totalRevenue = filteredTrips.reduce(
+      (sum, trip) => sum + trip.revenue,
+      0,
+    );
+    const totalExpenses = filteredTrips.reduce(
+      (sum, trip) =>
+        sum +
+        trip.expenses.diesel +
+        trip.expenses.toll +
+        trip.expenses.driver +
+        trip.expenses.other,
+      0,
+    );
+    const totalProfit = filteredTrips.reduce(
+      (sum, trip) => sum + trip.profit,
+      0,
+    );
+    const averageProfitPerTrip = totalTrips > 0 ? totalProfit / totalTrips : 0;
+
+    // Top performing trucks
+    const truckPerformance = new Map<
+      string,
+      { trips: number; profit: number }
+    >();
+    filteredTrips.forEach((trip) => {
+      const current = truckPerformance.get(trip.truckRegistration) || {
+        trips: 0,
+        profit: 0,
+      };
+      truckPerformance.set(trip.truckRegistration, {
+        trips: current.trips + 1,
+        profit: current.profit + trip.profit,
+      });
+    });
+
+    const topPerformingTrucks = Array.from(truckPerformance.entries())
+      .map(([truckId, data]) => ({ truckId, ...data }))
+      .sort((a, b) => b.profit - a.profit)
+      .slice(0, 5);
+
+    // Monthly data
+    const monthlyData = new Map<
+      string,
+      { trips: number; revenue: number; profit: number }
+    >();
+    filteredTrips.forEach((trip) => {
+      const month = new Date(trip.startDate).toISOString().substring(0, 7);
+      const current = monthlyData.get(month) || {
+        trips: 0,
+        revenue: 0,
+        profit: 0,
+      };
+      monthlyData.set(month, {
+        trips: current.trips + 1,
+        revenue: current.revenue + trip.revenue,
+        profit: current.profit + trip.profit,
+      });
+    });
+
+    const monthlyDataArray = Array.from(monthlyData.entries())
+      .map(([month, data]) => ({ month, ...data }))
+      .sort((a, b) => a.month.localeCompare(b.month));
+
+    // Expense breakdown
+    const expenseBreakdown = filteredTrips.reduce(
+      (acc, trip) => ({
+        diesel: acc.diesel + trip.expenses.diesel,
+        toll: acc.toll + trip.expenses.toll,
+        driver: acc.driver + trip.expenses.driver,
+        other: acc.other + trip.expenses.other,
+      }),
+      { diesel: 0, toll: 0, driver: 0, other: 0 },
+    );
+
+    return {
+      totalTrips,
+      completedTrips,
+      totalRevenue,
+      totalExpenses,
+      totalProfit,
+      averageProfitPerTrip,
+      topPerformingTrucks,
+      monthlyData: monthlyDataArray,
+      expenseBreakdown,
+    };
+  };
+
+  const generateInventoryReport = (filter?: ReportFilter): InventoryReport => {
+    let filteredTrucks = trucks;
+
+    if (filter) {
+      filteredTrucks = trucks.filter((truck) => {
+        const matchesDate =
+          (!filter.dateFrom ||
+            new Date(truck.purchaseDate) >= new Date(filter.dateFrom)) &&
+          (!filter.dateTo ||
+            new Date(truck.purchaseDate) <= new Date(filter.dateTo));
+        const matchesStatus = !filter.status || truck.status === filter.status;
+        return matchesDate && matchesStatus;
+      });
+    }
+
+    const totalTrucks = filteredTrucks.length;
+    const soldTrucks = filteredTrucks.filter(
+      (truck) => truck.status === "sold",
+    ).length;
+    const availableTrucks = filteredTrucks.filter(
+      (truck) => truck.status === "available",
+    ).length;
+    const pendingNOCs = filteredTrucks.filter(
+      (truck) => truck.nocApplied && !truck.nocReceivedDate,
+    ).length;
+
+    const totalInvestment = filteredTrucks.reduce((sum, truck) => {
+      const expenses = Object.values(truck.expenses).reduce(
+        (expSum, exp) => expSum + exp,
+        0,
+      );
+      return sum + truck.fullPurchaseAmount + expenses;
+    }, 0);
+
+    const soldTrucksList = filteredTrucks.filter(
+      (truck) => truck.status === "sold" && truck.saleDetails,
+    );
+    const totalSalesRevenue = soldTrucksList.reduce(
+      (sum, truck) => sum + (truck.saleDetails?.saleAmount || 0),
+      0,
+    );
+    const totalProfit = soldTrucksList.reduce(
+      (sum, truck) => sum + (truck.profit || 0),
+      0,
+    );
+    const averageProfitPerTruck = soldTrucks > 0 ? totalProfit / soldTrucks : 0;
+
+    // Top selling models
+    const modelPerformance = new Map<
+      string,
+      { count: number; profit: number }
+    >();
+    soldTrucksList.forEach((truck) => {
+      const current = modelPerformance.get(truck.model) || {
+        count: 0,
+        profit: 0,
+      };
+      modelPerformance.set(truck.model, {
+        count: current.count + 1,
+        profit: current.profit + (truck.profit || 0),
+      });
+    });
+
+    const topSellingModels = Array.from(modelPerformance.entries())
+      .map(([model, data]) => ({ model, ...data }))
+      .sort((a, b) => b.profit - a.profit)
+      .slice(0, 5);
+
+    // Monthly purchases
+    const monthlyPurchases = new Map<
+      string,
+      { purchases: number; investment: number }
+    >();
+    filteredTrucks.forEach((truck) => {
+      const month = new Date(truck.purchaseDate).toISOString().substring(0, 7);
+      const current = monthlyPurchases.get(month) || {
+        purchases: 0,
+        investment: 0,
+      };
+      const expenses = Object.values(truck.expenses).reduce(
+        (sum, exp) => sum + exp,
+        0,
+      );
+      monthlyPurchases.set(month, {
+        purchases: current.purchases + 1,
+        investment: current.investment + truck.fullPurchaseAmount + expenses,
+      });
+    });
+
+    const monthlyPurchasesArray = Array.from(monthlyPurchases.entries())
+      .map(([month, data]) => ({ month, ...data }))
+      .sort((a, b) => a.month.localeCompare(b.month));
+
+    // Monthly sales
+    const monthlySales = new Map<
+      string,
+      { sales: number; revenue: number; profit: number }
+    >();
+    soldTrucksList.forEach((truck) => {
+      if (truck.saleDetails) {
+        const month = new Date(truck.saleDetails.saleDate)
+          .toISOString()
+          .substring(0, 7);
+        const current = monthlySales.get(month) || {
+          sales: 0,
+          revenue: 0,
+          profit: 0,
+        };
+        monthlySales.set(month, {
+          sales: current.sales + 1,
+          revenue: current.revenue + truck.saleDetails.saleAmount,
+          profit: current.profit + (truck.profit || 0),
+        });
+      }
+    });
+
+    const monthlySalesArray = Array.from(monthlySales.entries())
+      .map(([month, data]) => ({ month, ...data }))
+      .sort((a, b) => a.month.localeCompare(b.month));
+
+    // Expense breakdown
+    const expenseBreakdown = filteredTrucks.reduce(
+      (acc, truck) => ({
+        transportation: acc.transportation + truck.expenses.transportation,
+        bodyWork: acc.bodyWork + truck.expenses.bodyWork,
+        kamaniWork: acc.kamaniWork + truck.expenses.kamaniWork,
+        tyre: acc.tyre + truck.expenses.tyre,
+        paint: acc.paint + truck.expenses.paint,
+        insurance: acc.insurance + truck.expenses.insurance,
+        other:
+          acc.other +
+          truck.expenses.driver +
+          truck.expenses.diesel +
+          truck.expenses.toll +
+          truck.expenses.floor +
+          truck.expenses.fatta +
+          truck.expenses.builty,
+      }),
+      {
+        transportation: 0,
+        bodyWork: 0,
+        kamaniWork: 0,
+        tyre: 0,
+        paint: 0,
+        insurance: 0,
+        other: 0,
+      },
+    );
+
+    return {
+      totalTrucks,
+      soldTrucks,
+      availableTrucks,
+      totalInvestment,
+      totalSalesRevenue,
+      totalProfit,
+      averageProfitPerTruck,
+      pendingNOCs,
+      topSellingModels,
+      monthlyPurchases: monthlyPurchasesArray,
+      monthlySales: monthlySalesArray,
+      expenseBreakdown,
+    };
+  };
+
+  const getDashboardMetrics = (): DashboardMetrics => {
+    const transportReport = generateTransportReport();
+    const inventoryReport = generateInventoryReport();
+
+    const totalRevenue =
+      transportReport.totalRevenue + inventoryReport.totalSalesRevenue;
+    const totalProfit =
+      transportReport.totalProfit + inventoryReport.totalProfit;
+    const roi =
+      inventoryReport.totalInvestment > 0
+        ? (totalProfit / inventoryReport.totalInvestment) * 100
+        : 0;
+
+    return {
+      transportMetrics: {
+        totalTrips: transportReport.totalTrips,
+        activeTrips: trips.filter(
+          (trip) => trip.status === "in-transit" || trip.status === "planned",
+        ).length,
+        monthlyProfit: transportReport.monthlyData
+          .filter(
+            (data) => data.month === new Date().toISOString().substring(0, 7),
+          )
+          .reduce((sum, data) => sum + data.profit, 0),
+        totalRevenue: transportReport.totalRevenue,
+      },
+      inventoryMetrics: {
+        totalTrucks: inventoryReport.totalTrucks,
+        soldTrucks: inventoryReport.soldTrucks,
+        pendingNOCs: inventoryReport.pendingNOCs,
+        totalProfit: inventoryReport.totalProfit,
+      },
+      overallMetrics: {
+        totalProfit,
+        totalRevenue,
+        totalInvestment: inventoryReport.totalInvestment,
+        roi,
+      },
+    };
+  };
+
+  const exportToPDF = (reportType: "transport" | "inventory", data: any) => {
+    // Mock PDF export - in real implementation, use libraries like jsPDF
+    console.log(`Exporting ${reportType} report to PDF:`, data);
+    alert(
+      `PDF export feature will be implemented. Report data logged to console.`,
+    );
+  };
+
+  const exportToCSV = (reportType: "transport" | "inventory", data: any) => {
+    // Mock CSV export - in real implementation, convert data to CSV format
+    console.log(`Exporting ${reportType} report to CSV:`, data);
+
+    let csvContent = "";
+
+    if (reportType === "transport") {
+      csvContent =
+        "Trip ID,Truck,Source,Destination,Start Date,Revenue,Profit,Status\n";
+      trips.forEach((trip) => {
+        csvContent += `${trip.id},${trip.truckRegistration},${trip.source},${trip.destination},${trip.startDate},${trip.revenue},${trip.profit},${trip.status}\n`;
+      });
+    } else {
+      csvContent =
+        "Truck ID,Registration,Model,Purchase Date,Purchase Amount,Status,Profit\n";
+      trucks.forEach((truck) => {
+        csvContent += `${truck.id},${truck.registrationNumber},${truck.model},${truck.purchaseDate},${truck.fullPurchaseAmount},${truck.status},${truck.profit || 0}\n`;
+      });
+    }
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `${reportType}_report.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const value = {
+    generateTransportReport,
+    generateInventoryReport,
+    getDashboardMetrics,
+    exportToPDF,
+    exportToCSV,
+  };
+
+  return (
+    <ReportsContext.Provider value={value}>{children}</ReportsContext.Provider>
+  );
+}
+
+export function useReports() {
+  const context = useContext(ReportsContext);
+  if (context === undefined) {
+    throw new Error("useReports must be used within a ReportsProvider");
+  }
+  return context;
+}
