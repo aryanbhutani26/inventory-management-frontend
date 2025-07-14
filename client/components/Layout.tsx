@@ -175,29 +175,29 @@ export default function Layout() {
           </nav>
 
           {/* Mobile User info and logout */}
-          <div className="p-4 border-t border-sidebar-border">
-            <div className="space-y-3">
+          <div className="p-4 border-t border-sidebar-border/50 bg-gradient-to-r from-sidebar-background to-sidebar-accent/30">
+            <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-medium text-primary">
+                  <div className="user-avatar w-10 h-10 rounded-xl flex items-center justify-center">
+                    <span className="text-sm font-bold">
                       {user?.username?.charAt(0).toUpperCase()}
                     </span>
                   </div>
                   <div
-                    className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success rounded-full border-2 border-sidebar-background"
+                    className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success rounded-full border-2 border-sidebar-background animate-pulse"
                     title="Online"
                   />
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-sidebar-foreground">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-sidebar-foreground truncate">
                     {user?.username}
                   </p>
-                  <p className="text-xs text-sidebar-foreground/70 capitalize">
-                    {user?.role}
+                  <p className="text-xs text-sidebar-foreground/80 capitalize font-medium">
+                    {user?.role} User
                   </p>
                   {user?.lastLogin && (
-                    <p className="text-xs text-sidebar-foreground/50">
+                    <p className="text-xs text-sidebar-foreground/60">
                       Last: {new Date(user.lastLogin).toLocaleDateString()}
                     </p>
                   )}
@@ -207,7 +207,7 @@ export default function Layout() {
                 variant="outline"
                 size="sm"
                 onClick={handleLogoutClick}
-                className="w-full justify-start text-sidebar-foreground border-sidebar-border hover:bg-sidebar-accent"
+                className="w-full justify-start text-sidebar-foreground border-sidebar-border/70 hover:bg-sidebar-accent hover:border-sidebar-border font-medium transition-all duration-200 hover:shadow-sm"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sign Out
