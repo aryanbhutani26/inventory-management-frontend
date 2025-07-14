@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import React, { useState, useMemo, useEffect } from "react";
+import { Link, useSearchParams, useLocation } from "react-router-dom";
 import { useInventory, TruckInventory } from "../contexts/InventoryContext";
 import { useAuth } from "../contexts/AuthContext";
 import {
@@ -61,6 +61,7 @@ export default function Inventory() {
   const { trucks, truckModels, deleteTruck } = useInventory();
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [modelFilter, setModelFilter] = useState<string>("all");
@@ -68,8 +69,17 @@ export default function Inventory() {
   const [dateToFilter, setDateToFilter] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const view = searchParams.get("view") || "list";
+  // Determine view based on URL path or search params
+  const isNewRoute = location.pathname === "/inventory/new";
+  const view = isNewRoute ? "create" : searchParams.get("view") || "list";
   const editTruckId = searchParams.get("edit");
+
+  // Auto-redirect to main inventory page after form submission when coming from /new route
+  useEffect(() => {
+    if (isNewRoute && view !== "create") {
+      // This will be handled by TruckForm component navigation
+    }
+  }, [isNewRoute, view]);
 
   // Calculate metrics
   const metrics = useMemo(() => {
