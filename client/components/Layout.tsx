@@ -127,21 +127,24 @@ export default function Layout() {
           className="absolute inset-0 bg-black/50"
           onClick={() => setSidebarOpen(false)}
         />
-        <div className="absolute left-0 top-0 h-full w-64 bg-sidebar-background">
-          <div className="flex h-16 items-center justify-between px-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Truck className="w-5 h-5 text-primary-foreground" />
+        <div className="absolute left-0 top-0 h-full w-72 bg-sidebar-background shadow-2xl">
+          <div className="sidebar-header flex h-16 items-center justify-between px-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
+                <Truck className="w-6 h-6 text-primary-foreground" />
               </div>
-              <span className="text-lg font-semibold text-sidebar-foreground">
-                TransportPro
-              </span>
+              <div className="flex flex-col">
+                <span className="sidebar-brand text-lg">TransportPro</span>
+                <span className="text-xs text-sidebar-foreground/70 font-medium">
+                  Transport Management
+                </span>
+              </div>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setSidebarOpen(false)}
-              className="text-sidebar-foreground hover:bg-sidebar-accent"
+              className="text-sidebar-foreground hover:bg-sidebar-accent rounded-lg p-2"
             >
               <X className="w-5 h-5" />
             </Button>
