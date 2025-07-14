@@ -12,6 +12,7 @@ import { ReportsProvider } from "./contexts/ReportsContext";
 import { UserProvider } from "./contexts/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
+import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Transportation from "./pages/Transportation";
