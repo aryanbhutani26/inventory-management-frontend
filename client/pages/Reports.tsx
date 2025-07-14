@@ -324,16 +324,19 @@ export default function Reports() {
                 <div className="space-y-2">
                   <Label htmlFor="transportStatus">Status</Label>
                   <Select
-                    value={transportFilter.status || ""}
+                    value={transportFilter.status || "all"}
                     onValueChange={(value) =>
-                      updateTransportFilter("status", value)
+                      updateTransportFilter(
+                        "status",
+                        value === "all" ? "" : value,
+                      )
                     }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="All Status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Status</SelectItem>
+                      <SelectItem value="all">All Status</SelectItem>
                       <SelectItem value="planned">Planned</SelectItem>
                       <SelectItem value="in-transit">In Transit</SelectItem>
                       <SelectItem value="completed">Completed</SelectItem>
@@ -517,16 +520,19 @@ export default function Reports() {
                 <div className="space-y-2">
                   <Label htmlFor="inventoryStatus">Status</Label>
                   <Select
-                    value={inventoryFilter.status || ""}
+                    value={inventoryFilter.status || "all"}
                     onValueChange={(value) =>
-                      updateInventoryFilter("status", value)
+                      updateInventoryFilter(
+                        "status",
+                        value === "all" ? "" : value,
+                      )
                     }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="All Status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Status</SelectItem>
+                      <SelectItem value="all">All Status</SelectItem>
                       <SelectItem value="available">Available</SelectItem>
                       <SelectItem value="sold">Sold</SelectItem>
                       <SelectItem value="maintenance">Maintenance</SelectItem>
