@@ -260,4 +260,36 @@
   .demo-credential-card {
     @apply bg-gradient-to-br from-muted/60 to-muted/40 p-4 rounded-xl border border-border/30 hover:border-border/60 transition-all duration-300 hover:shadow-md hover:scale-105 backdrop-blur-sm;
   }
+
+  /* Admin Pages Theme */
+  .admin-action-btn {
+    background: linear-gradient(
+      to right,
+      hsl(var(--primary)),
+      hsl(var(--accent))
+    );
+    @apply text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 font-semibold border-0;
+  }
+
+  .admin-metric-card {
+    @apply hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 hover:-translate-y-1 border border-border/30 backdrop-blur-sm;
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--card)),
+      hsl(var(--card) / 0.95)
+    );
+  }
+
+  .admin-feature-card {
+    @apply border border-border/30 hover:shadow-xl hover:shadow-primary/10 transition-all duration-500 backdrop-blur-sm;
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--card)),
+      hsl(var(--card) / 0.98)
+    );
+  }
+
+  .admin-feature-item {
+    @apply flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-muted/30 to-muted/20 border border-border/20 hover:border-border/40 transition-all duration-300 hover:shadow-sm text-sm font-medium;
+  }
 }
