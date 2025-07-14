@@ -57,6 +57,14 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="users/new"
+          element={
+            <ProtectedRoute requireRole="admin">
+              <UserManagement />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
