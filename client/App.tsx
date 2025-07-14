@@ -52,7 +52,9 @@ function AppRoutes() {
       >
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="transportation" element={<Transportation />} />
+        <Route path="transportation/new" element={<Transportation />} />
         <Route path="inventory" element={<Inventory />} />
+        <Route path="inventory/new" element={<Inventory />} />
         <Route path="reports" element={<Reports />} />
         <Route
           path="users"
