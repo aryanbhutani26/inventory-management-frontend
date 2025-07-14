@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import LogoutConfirmation from "./LogoutConfirmation";
+import { useToast } from "../hooks/use-toast";
 
 const navigation = [
   {
@@ -47,6 +48,7 @@ export default function Layout() {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = React.useState(false);
 
@@ -56,14 +58,32 @@ export default function Layout() {
 
   const handleLogoutConfirm = () => {
     try {
+      const username = user?.username;
       logout();
       setSidebarOpen(false); // Close mobile sidebar if open
       setShowLogoutConfirm(false);
+
+      // Show success toast
+      toast({
+        title: "Signed out successfully",
+        description: `Goodbye ${username}! You have been signed out of TransportPro.`,
+        duration: 3000,
+      });
+
       navigate("/login", { replace: true });
     } catch (error) {
       console.error("Logout error:", error);
       // Force logout even if there's an error
       setShowLogoutConfirm(false);
+
+      // Show error toast
+      toast({
+        title: "Signed out",
+        description: "You have been signed out due to an error.",
+        variant: "destructive",
+        duration: 3000,
+      });
+
       navigate("/login", { replace: true });
     }
   };
