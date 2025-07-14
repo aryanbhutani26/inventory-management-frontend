@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
+import { Link, useSearchParams, useLocation } from "react-router-dom";
+import { useUser, User } from "../contexts/UserContext";
+import { useAuth } from "../contexts/AuthContext";
 import {
   Card,
   CardContent,
@@ -6,6 +9,36 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../components/ui/alert-dialog";
+import { Badge } from "../components/ui/badge";
+import { useToast } from "../components/ui/use-toast";
 import {
   Plus,
   Users,
@@ -15,9 +48,219 @@ import {
   Lock,
   Activity,
   Crown,
+  Search,
+  Filter,
+  Edit,
+  Trash2,
+  MoreHorizontal,
+  Mail,
+  Phone,
+  Calendar,
+  RotateCcw,
+  ChevronLeft,
+  ChevronRight,
+  UserX,
+  UserPlus,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../components/ui/dropdown-menu";
+import UserForm from "../components/UserForm";
+
+const ITEMS_PER_PAGE = 10;
 
 export default function UserManagement() {
+  const { users, deleteUser, toggleUserStatus, resetUserPassword } = useUser();
+  const { user: currentUser } = useAuth();
+  const { toast } = useToast();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [roleFilter, setRoleFilter] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
+
+  // Determine view based on URL path or search params
+  const isNewRoute = location.pathname === "/users/new";
+  const view = isNewRoute ? "create" : searchParams.get("view") || "list";
+  const editUserId = searchParams.get("edit");
+
+  // Calculate metrics
+  const metrics = useMemo(() => {
+    const totalUsers = users.length;
+    const adminUsers = users.filter((user) => user.role === "admin").length;
+    const staffUsers = users.filter((user) => user.role === "staff").length;
+    const activeUsers = users.filter((user) => user.status === "active").length;
+    const inactiveUsers = users.filter(
+      (user) => user.status !== "active",
+    ).length;
+
+    return {
+      totalUsers,
+      adminUsers,
+      staffUsers,
+      activeUsers,
+      inactiveUsers,
+    };
+  }, [users]);
+
+  // Filter and search users
+  const filteredUsers = useMemo(() => {
+    let filtered = users;
+
+    // Search filter
+    if (searchTerm) {
+      const lowercaseSearch = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (user) =>
+          user.username.toLowerCase().includes(lowercaseSearch) ||
+          user.email.toLowerCase().includes(lowercaseSearch) ||
+          user.fullName.toLowerCase().includes(lowercaseSearch) ||
+          user.department?.toLowerCase().includes(lowercaseSearch),
+      );
+    }
+
+    // Status filter
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((user) => user.status === statusFilter);
+    }
+
+    // Role filter
+    if (roleFilter !== "all") {
+      filtered = filtered.filter((user) => user.role === roleFilter);
+    }
+
+    return filtered;
+  }, [users, searchTerm, statusFilter, roleFilter]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
+  const paginatedUsers = filteredUsers.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
+
+  const handleDeleteUser = async (userId: string) => {
+    setDeletingUserId(userId);
+    try {
+      const success = await deleteUser(userId);
+      if (success) {
+        toast({
+          title: "User Deleted",
+          description: "The user has been successfully deleted.",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to delete user. Cannot delete the last admin.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An error occurred while deleting the user.",
+        variant: "destructive",
+      });
+    } finally {
+      setDeletingUserId(null);
+    }
+  };
+
+  const handleToggleStatus = async (userId: string) => {
+    try {
+      const success = await toggleUserStatus(userId);
+      if (success) {
+        toast({
+          title: "Status Updated",
+          description: "User status has been updated successfully.",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update user status.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleResetPassword = async (userId: string) => {
+    try {
+      const success = await resetUserPassword(userId);
+      if (success) {
+        toast({
+          title: "Password Reset",
+          description: "Password reset email has been sent to the user.",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to reset password.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getStatusBadge = (status: User["status"]) => {
+    switch (status) {
+      case "active":
+        return <Badge className="bg-success hover:bg-success/90">Active</Badge>;
+      case "inactive":
+        return <Badge variant="secondary">Inactive</Badge>;
+      case "suspended":
+        return <Badge variant="destructive">Suspended</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
+    }
+  };
+
+  const getRoleBadge = (role: string) => {
+    return role === "admin" ? (
+      <Badge className="bg-accent hover:bg-accent/90">
+        <Shield className="w-3 h-3 mr-1" />
+        Admin
+      </Badge>
+    ) : (
+      <Badge variant="outline">
+        <Users className="w-3 h-3 mr-1" />
+        Staff
+      </Badge>
+    );
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const formatLastLogin = (lastLogin?: string) => {
+    if (!lastLogin) return "Never";
+    return new Date(lastLogin).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  if (view === "create") {
+    return <UserForm mode="create" />;
+  }
+
+  if (view === "edit" && editUserId) {
+    return <UserForm mode="edit" userId={editUserId} />;
+  }
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -35,7 +278,10 @@ export default function UserManagement() {
             Manage user accounts and permissions (Admin only).
           </p>
         </div>
-        <Button className="admin-action-btn group">
+        <Button
+          className="admin-action-btn group"
+          onClick={() => setSearchParams({ view: "create" })}
+        >
           <Plus className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform duration-300" />
           Add User
         </Button>
