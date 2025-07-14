@@ -218,17 +218,20 @@ export default function Layout() {
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-40 lg:w-64 lg:flex lg:flex-col">
-        <div className="bg-sidebar-background border-r border-sidebar-border flex flex-col flex-1">
+      <div className="hidden lg:fixed lg:inset-y-0 lg:z-40 lg:w-72 lg:flex lg:flex-col">
+        <div className="bg-sidebar-background border-r border-sidebar-border/50 flex flex-col flex-1 shadow-xl">
           {/* Logo */}
-          <div className="flex h-16 items-center px-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Truck className="w-5 h-5 text-primary-foreground" />
+          <div className="sidebar-header flex h-16 items-center px-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
+                <Truck className="w-6 h-6 text-primary-foreground" />
               </div>
-              <span className="text-lg font-semibold text-sidebar-foreground">
-                TransportPro
-              </span>
+              <div className="flex flex-col">
+                <span className="sidebar-brand text-lg">TransportPro</span>
+                <span className="text-xs text-sidebar-foreground/70 font-medium">
+                  Transport Management
+                </span>
+              </div>
             </div>
           </div>
 
