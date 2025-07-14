@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import React, { useState, useMemo, useEffect } from "react";
+import { Link, useSearchParams, useLocation } from "react-router-dom";
 import { useTransport, Trip } from "../contexts/TransportContext";
 import { useAuth } from "../contexts/AuthContext";
 import {
