@@ -15,6 +15,7 @@ import {
 import { cn } from "../lib/utils";
 import LogoutConfirmation from "./LogoutConfirmation";
 import { useToast } from "../hooks/use-toast";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const navigation = [
   {
@@ -181,6 +182,11 @@ export default function Layout() {
                   <p className="text-xs text-sidebar-foreground/70 capitalize">
                     {user?.role}
                   </p>
+                  {user?.lastLogin && (
+                    <p className="text-xs text-sidebar-foreground/50">
+                      Last: {new Date(user.lastLogin).toLocaleDateString()}
+                    </p>
+                  )}
                 </div>
               </div>
               <Button
@@ -235,23 +241,41 @@ export default function Layout() {
           {/* User info */}
           <div className="p-4 border-t border-sidebar-border">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-sidebar-foreground">
-                  {user?.username}
-                </p>
-                <p className="text-xs text-sidebar-foreground/70 capitalize">
-                  {user?.role}
-                </p>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleLogoutClick}
-                className="text-sidebar-foreground hover:bg-sidebar-accent"
-                title="Sign Out"
-              >
-                <LogOut className="w-4 h-4" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="cursor-default">
+                    <p className="text-sm font-medium text-sidebar-foreground">
+                      {user?.username}
+                    </p>
+                    <p className="text-xs text-sidebar-foreground/70 capitalize">
+                      {user?.role}
+                    </p>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    Last login:{" "}
+                    {user?.lastLogin
+                      ? new Date(user.lastLogin).toLocaleString()
+                      : "Unknown"}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleLogoutClick}
+                    className="text-sidebar-foreground hover:bg-sidebar-accent"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Sign Out (Ctrl+Shift+L)</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
         </div>
