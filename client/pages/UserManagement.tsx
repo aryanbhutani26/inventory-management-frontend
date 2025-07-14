@@ -284,7 +284,7 @@ export default function UserManagement() {
         >
           <Plus className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform duration-300" />
           Add User
-                </Button>
+        </Button>
       </div>
 
       {/* Key Metrics */}
@@ -452,7 +452,8 @@ export default function UserManagement() {
               <Label>Results</Label>
               <div className="flex items-center h-10 px-3 rounded-md border bg-muted/50">
                 <span className="text-sm text-muted-foreground">
-                  {filteredUsers.length} user{filteredUsers.length !== 1 ? "s" : ""}
+                  {filteredUsers.length} user
+                  {filteredUsers.length !== 1 ? "s" : ""}
                 </span>
               </div>
             </div>
@@ -491,7 +492,9 @@ export default function UserManagement() {
                         <div>
                           <p className="font-semibold">No users found</p>
                           <p className="text-sm text-muted-foreground">
-                            {searchTerm || statusFilter !== "all" || roleFilter !== "all"
+                            {searchTerm ||
+                            statusFilter !== "all" ||
+                            roleFilter !== "all"
                               ? "Try adjusting your filters"
                               : "Start by adding your first user"}
                           </p>
@@ -588,13 +591,20 @@ export default function UserManagement() {
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                   <AlertDialogHeader>
-                                    <AlertDialogTitle>Delete User</AlertDialogTitle>
+                                    <AlertDialogTitle>
+                                      Delete User
+                                    </AlertDialogTitle>
                                     <AlertDialogDescription>
-                                      Are you sure you want to delete {user.fullName}? This action cannot be undone and will permanently remove the user and all associated data.
+                                      Are you sure you want to delete{" "}
+                                      {user.fullName}? This action cannot be
+                                      undone and will permanently remove the
+                                      user and all associated data.
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogCancel>
+                                      Cancel
+                                    </AlertDialogCancel>
                                     <AlertDialogAction
                                       onClick={() => handleDeleteUser(user.id)}
                                       className="bg-destructive hover:bg-destructive/90"
@@ -625,15 +635,17 @@ export default function UserManagement() {
           {totalPages > 1 && (
             <div className="flex items-center justify-between mt-4">
               <div className="text-sm text-muted-foreground">
-                Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1} to{" "}
-                {Math.min(currentPage * ITEMS_PER_PAGE, filteredUsers.length)} of{" "}
-                {filteredUsers.length} results
+                Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to{" "}
+                {Math.min(currentPage * ITEMS_PER_PAGE, filteredUsers.length)}{" "}
+                of {filteredUsers.length} results
               </div>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(1, prev - 1))
+                  }
                   disabled={currentPage === 1}
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -656,118 +668,6 @@ export default function UserManagement() {
               </div>
             </div>
           )}
-        </CardContent>
-      </Card>
-    </div>
-  );
-        <Card className="metric-card admin-metric-card group">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <Users className="h-4 w-4 text-white" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-              8
-            </div>
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <Activity className="w-3 h-3" />
-              System users
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="metric-card admin-metric-card group">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Admins</CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-accent/80 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <Shield className="h-4 w-4 text-white" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">
-              2
-            </div>
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <Crown className="w-3 h-3" />
-              Admin users
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="metric-card admin-metric-card group">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Staff</CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-success to-success/80 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <UserCheck className="h-4 w-4 text-white" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold bg-gradient-to-r from-success to-success/80 bg-clip-text text-transparent">
-              6
-            </div>
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <Users className="w-3 h-3" />
-              Staff users
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card className="admin-feature-card relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
-        <CardHeader className="relative">
-          <CardTitle className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <Lock className="w-4 h-4 text-white" />
-            </div>
-            Access Control
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="relative">
-          <div className="text-center py-12">
-            <div className="relative mb-6">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-border/30">
-                <Users className="w-10 h-10 text-primary" />
-              </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-gradient-to-br from-accent to-accent/80 flex items-center justify-center">
-                <Settings
-                  className="w-3 h-3 text-white animate-spin"
-                  style={{ animationDuration: "3s" }}
-                />
-              </div>
-            </div>
-            <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
-              User Management Module
-            </h3>
-            <p className="text-muted-foreground mb-8">
-              Complete user management system with role-based access control and
-              security features.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
-              <div className="admin-feature-item">
-                <Plus className="w-4 h-4 text-primary" />
-                <span>Create and manage user accounts</span>
-              </div>
-              <div className="admin-feature-item">
-                <Shield className="w-4 h-4 text-accent" />
-                <span>Role-based permissions (Admin/Staff)</span>
-              </div>
-              <div className="admin-feature-item">
-                <Activity className="w-4 h-4 text-success" />
-                <span>User activity tracking</span>
-              </div>
-              <div className="admin-feature-item">
-                <Lock className="w-4 h-4 text-warning" />
-                <span>Password management</span>
-              </div>
-              <div className="admin-feature-item col-span-1 sm:col-span-2">
-                <Settings className="w-4 h-4 text-primary" />
-                <span>Security audit logs</span>
-              </div>
-            </div>
-          </div>
         </CardContent>
       </Card>
     </div>
