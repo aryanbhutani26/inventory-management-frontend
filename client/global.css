@@ -306,4 +306,99 @@
   .dashboard-secondary-btn {
     @apply border-2 border-primary/20 bg-background hover:bg-primary/5 text-primary hover:text-primary/90 font-semibold hover:border-primary/40 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:scale-105;
   }
+
+  /* Global Theme Enhancements */
+  .page-container {
+    @apply transition-all duration-500 ease-out;
+  }
+
+  .page-header {
+    @apply relative mb-8;
+  }
+
+  .page-header::after {
+    content: "";
+    @apply absolute bottom-0 left-0 w-20 h-1 bg-gradient-to-r from-primary to-accent rounded-full;
+  }
+
+  .enhanced-card {
+    @apply bg-gradient-to-br from-card to-card/95 border border-border/30 hover:border-border/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 backdrop-blur-sm;
+  }
+
+  .icon-wrapper {
+    @apply transition-all duration-300 hover:scale-110 hover:rotate-3;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent font-bold;
+  }
+
+  .floating-element {
+    @apply animate-pulse;
+    animation-duration: 3s;
+  }
+
+  /* Enhanced Input Focus States */
+  .ui-input:focus {
+    @apply ring-2 ring-primary/20 border-primary/50 shadow-lg shadow-primary/10;
+  }
+
+  /* Enhanced Button Hover Effects */
+  .btn-enhanced {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+
+  .btn-enhanced::before {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full transition-transform duration-700;
+  }
+
+  .btn-enhanced:hover::before {
+    @apply translate-x-full;
+  }
+
+  /* Smooth Page Transitions */
+  .fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Enhanced Scrollbar for Theme Consistency */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted) / 0.3);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--primary) / 0.6),
+      hsl(var(--accent) / 0.6)
+    );
+    border-radius: 10px;
+    border: 2px solid hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--primary)),
+      hsl(var(--accent))
+    );
+  }
 }
