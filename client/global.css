@@ -159,7 +159,12 @@
   }
 
   .nav-link.active {
-    @apply bg-sidebar-primary text-sidebar-primary-foreground shadow-lg font-semibold border-l-4 border-sidebar-primary-foreground/20;
+    @apply bg-gradient-to-r from-sidebar-primary to-sidebar-primary/90 text-sidebar-primary-foreground shadow-lg font-semibold border-l-4 border-sidebar-primary-foreground/30 relative;
+  }
+
+  .nav-link.active::after {
+    content: "";
+    @apply absolute right-2 top-1/2 -translate-y-1/2 w-1 h-1 bg-sidebar-primary-foreground rounded-full animate-pulse;
   }
 
   .sidebar-header {
