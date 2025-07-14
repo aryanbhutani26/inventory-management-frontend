@@ -401,4 +401,76 @@
       hsl(var(--accent))
     );
   }
+
+  /* Landing Page Specific Styles */
+  .hero-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .feature-card-hover {
+    @apply transition-all duration-500 ease-out;
+  }
+
+  .feature-card-hover:hover {
+    @apply transform -translate-y-2 shadow-2xl;
+  }
+
+  .feature-card-hover:hover .feature-icon {
+    @apply scale-110 rotate-3;
+  }
+
+  .parallax-bg {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+  }
+
+  .text-gradient-secondary {
+    @apply bg-gradient-to-r from-accent via-success to-warning bg-clip-text text-transparent;
+  }
+
+  .cta-button {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+
+  .cta-button::before {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full transition-transform duration-700;
+  }
+
+  .cta-button:hover::before {
+    @apply translate-x-full;
+  }
+
+  .landing-nav {
+    @apply transition-all duration-300;
+    backdrop-filter: blur(20px);
+  }
+
+  .landing-nav.scrolled {
+    @apply bg-background/95 border-b border-border/50 shadow-lg;
+  }
+
+  .stat-card {
+    @apply transition-all duration-300 hover:scale-105;
+  }
+
+  .social-icon {
+    @apply transition-all duration-300 hover:scale-110 hover:-translate-y-1;
+  }
 }
