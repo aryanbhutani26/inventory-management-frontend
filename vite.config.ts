@@ -33,21 +33,20 @@
 //     },
 //   };
 // }
-
 import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { createServer } from "./server";
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
+  base: "/", // ✅ for Vercel use "/"
+  build: {
+    outDir: "dist/spa", // ✅ must be dist
+  },
   server: {
     host: "::",
     port: 8080,
   },
-  build: {
-    outDir: "dist", // ✅ Use correct output directory
-  },
-  base: "./", // ✅ Optional but recommended for relative paths
   plugins: [react(), expressPlugin()],
   resolve: {
     alias: {
@@ -55,7 +54,7 @@ export default defineConfig(({ mode }) => ({
       "@shared": path.resolve(__dirname, "./shared"),
     },
   },
-}));
+});
 
 function expressPlugin(): Plugin {
   return {
@@ -67,4 +66,3 @@ function expressPlugin(): Plugin {
     },
   };
 }
-
