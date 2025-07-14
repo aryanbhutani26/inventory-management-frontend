@@ -261,17 +261,30 @@ export default function Layout() {
           </nav>
 
           {/* User info */}
-          <div className="p-4 border-t border-sidebar-border">
+          <div className="p-4 border-t border-sidebar-border/50 bg-gradient-to-r from-sidebar-background to-sidebar-accent/30">
             <div className="flex items-center justify-between">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className="cursor-default">
-                    <p className="text-sm font-medium text-sidebar-foreground">
-                      {user?.username}
-                    </p>
-                    <p className="text-xs text-sidebar-foreground/70 capitalize">
-                      {user?.role}
-                    </p>
+                  <div className="cursor-default flex items-center gap-3 flex-1 min-w-0">
+                    <div className="relative">
+                      <div className="user-avatar w-9 h-9 rounded-lg flex items-center justify-center">
+                        <span className="text-sm font-bold">
+                          {user?.username?.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div
+                        className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-success rounded-full border-2 border-sidebar-background animate-pulse"
+                        title="Online"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-sidebar-foreground truncate">
+                        {user?.username}
+                      </p>
+                      <p className="text-xs text-sidebar-foreground/80 capitalize font-medium">
+                        {user?.role} User
+                      </p>
+                    </div>
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -289,7 +302,7 @@ export default function Layout() {
                     variant="ghost"
                     size="sm"
                     onClick={handleLogoutClick}
-                    className="text-sidebar-foreground hover:bg-sidebar-accent"
+                    className="text-sidebar-foreground hover:bg-sidebar-accent rounded-lg p-2 transition-all duration-200 hover:shadow-sm ml-2"
                   >
                     <LogOut className="w-4 h-4" />
                   </Button>
