@@ -13,6 +13,7 @@ import {
   Home,
 } from "lucide-react";
 import { cn } from "../lib/utils";
+import LogoutConfirmation from "./LogoutConfirmation";
 
 const navigation = [
   {
@@ -47,17 +48,28 @@ export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = React.useState(false);
 
-  const handleLogout = () => {
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const handleLogoutConfirm = () => {
     try {
       logout();
       setSidebarOpen(false); // Close mobile sidebar if open
+      setShowLogoutConfirm(false);
       navigate("/login", { replace: true });
     } catch (error) {
       console.error("Logout error:", error);
       // Force logout even if there's an error
+      setShowLogoutConfirm(false);
       navigate("/login", { replace: true });
     }
+  };
+
+  const handleLogoutCancel = () => {
+    setShowLogoutConfirm(false);
   };
 
   const filteredNavigation = navigation.filter((item) =>
@@ -137,7 +149,7 @@ export default function Layout() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleLogout}
+                onClick={handleLogoutClick}
                 className="w-full justify-start text-sidebar-foreground border-sidebar-border hover:bg-sidebar-accent"
               >
                 <LogOut className="w-4 h-4 mr-2" />
@@ -197,8 +209,9 @@ export default function Layout() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleLogout}
+                onClick={handleLogoutClick}
                 className="text-sidebar-foreground hover:bg-sidebar-accent"
+                title="Sign Out"
               >
                 <LogOut className="w-4 h-4" />
               </Button>
@@ -225,7 +238,12 @@ export default function Layout() {
               </div>
               <span className="font-semibold">TransportPro</span>
             </div>
-            <Button variant="ghost" size="sm" onClick={handleLogout}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogoutClick}
+              title="Sign Out"
+            >
               <LogOut className="w-4 h-4" />
             </Button>
           </div>
@@ -236,6 +254,14 @@ export default function Layout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Logout Confirmation Dialog */}
+      <LogoutConfirmation
+        isOpen={showLogoutConfirm}
+        onClose={handleLogoutCancel}
+        onConfirm={handleLogoutConfirm}
+        username={user?.username}
+      />
     </div>
   );
 }
