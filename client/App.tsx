@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { TransportProvider } from "./contexts/TransportContext";
 import { InventoryProvider } from "./contexts/InventoryContext";
 import { ReportsProvider } from "./contexts/ReportsContext";
+import { UserProvider } from "./contexts/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
