@@ -217,4 +217,47 @@
     background: hsl(var(--sidebar-background) / 0.95);
     @apply backdrop-blur-md border-r border-sidebar-border/30;
   }
+
+  /* Login Page Theme */
+  .login-background {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--sidebar-background)) 0%,
+      hsl(var(--sidebar-accent)) 25%,
+      hsl(var(--background)) 50%,
+      hsl(var(--primary) / 0.05) 75%,
+      hsl(var(--accent) / 0.05) 100%
+    );
+  }
+
+  .login-backdrop {
+    @apply backdrop-blur-3xl;
+    background: radial-gradient(
+      ellipse at center,
+      hsl(var(--primary) / 0.03) 0%,
+      transparent 50%
+    );
+  }
+
+  .login-logo {
+    @apply transition-transform duration-300 hover:scale-110;
+  }
+
+  .login-card {
+    @apply border border-border/20 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10;
+    backdrop-filter: blur(20px);
+  }
+
+  .login-submit-btn {
+    background: linear-gradient(
+      to right,
+      hsl(var(--primary)),
+      hsl(var(--primary) / 0.9)
+    );
+    @apply hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 font-semibold;
+  }
+
+  .demo-credential-card {
+    @apply bg-gradient-to-br from-muted/60 to-muted/40 p-4 rounded-xl border border-border/30 hover:border-border/60 transition-all duration-300 hover:shadow-md hover:scale-105 backdrop-blur-sm;
+  }
 }
