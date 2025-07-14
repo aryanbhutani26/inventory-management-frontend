@@ -127,7 +127,7 @@ export default function Layout() {
           className="absolute inset-0 bg-black/50"
           onClick={() => setSidebarOpen(false)}
         />
-        <div className="absolute left-0 top-0 h-full w-72 bg-sidebar-background shadow-2xl">
+        <div className="absolute left-0 top-0 h-full w-72 bg-sidebar-background shadow-2xl transform transition-transform duration-300 ease-out animate-in slide-in-from-left-72">
           <div className="sidebar-header flex h-16 items-center justify-between px-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
@@ -150,7 +150,7 @@ export default function Layout() {
             </Button>
           </div>
           <nav className="mt-8 px-4 flex-1">
-            <div className="mb-4">
+            <div className="nav-section mb-4">
               <h3 className="text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wider px-3 mb-3">
                 Navigation
               </h3>
@@ -219,7 +219,7 @@ export default function Layout() {
 
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-40 lg:w-72 lg:flex lg:flex-col">
-        <div className="bg-sidebar-background border-r border-sidebar-border/50 flex flex-col flex-1 shadow-xl">
+        <div className="sidebar-backdrop flex flex-col flex-1 shadow-xl">
           {/* Logo */}
           <div className="sidebar-header flex h-16 items-center px-6">
             <div className="flex items-center gap-3">
@@ -237,7 +237,7 @@ export default function Layout() {
 
           {/* Navigation */}
           <nav className="mt-8 px-4 flex-1">
-            <div className="mb-4">
+            <div className="nav-section mb-4">
               <h3 className="text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wider px-3 mb-3">
                 Navigation
               </h3>
