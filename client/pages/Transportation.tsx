@@ -59,6 +59,7 @@ export default function Transportation() {
   const { trips, trucks, deleteTrip } = useTransport();
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [truckFilter, setTruckFilter] = useState<string>("all");
@@ -66,8 +67,17 @@ export default function Transportation() {
   const [dateToFilter, setDateToFilter] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const view = searchParams.get("view") || "list";
+  // Determine view based on URL path or search params
+  const isNewRoute = location.pathname === "/transportation/new";
+  const view = isNewRoute ? "create" : searchParams.get("view") || "list";
   const editTripId = searchParams.get("edit");
+
+  // Auto-redirect to main transportation page after form submission when coming from /new route
+  useEffect(() => {
+    if (isNewRoute && view !== "create") {
+      // This will be handled by TripForm component navigation
+    }
+  }, [isNewRoute, view]);
 
   // Calculate metrics
   const metrics = useMemo(() => {
