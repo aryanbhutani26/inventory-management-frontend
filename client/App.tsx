@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { TransportProvider } from "./contexts/TransportContext";
+import { InventoryProvider } from "./contexts/InventoryContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
@@ -74,7 +75,9 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <TransportProvider>
-            <AppRoutes />
+            <InventoryProvider>
+              <AppRoutes />
+            </InventoryProvider>
           </TransportProvider>
         </AuthProvider>
       </BrowserRouter>
