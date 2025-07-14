@@ -6,6 +6,7 @@ export interface User {
   id: string;
   username: string;
   role: UserRole;
+  lastLogin?: string;
 }
 
 interface AuthContextType {
@@ -45,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id: foundUser.id,
         username: foundUser.username,
         role: foundUser.role,
+        lastLogin: new Date().toISOString(),
       };
       setUser(userWithoutPassword);
       localStorage.setItem("user", JSON.stringify(userWithoutPassword));
