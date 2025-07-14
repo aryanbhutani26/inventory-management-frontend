@@ -49,8 +49,15 @@ export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const handleLogout = () => {
-    logout();
-    navigate("/login");
+    try {
+      logout();
+      setSidebarOpen(false); // Close mobile sidebar if open
+      navigate("/login", { replace: true });
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Force logout even if there's an error
+      navigate("/login", { replace: true });
+    }
   };
 
   const filteredNavigation = navigation.filter((item) =>
@@ -89,7 +96,7 @@ export default function Layout() {
               <X className="w-5 h-5" />
             </Button>
           </div>
-          <nav className="mt-6 px-4">
+          <nav className="mt-6 px-4 flex-1">
             <ul className="space-y-2">
               {filteredNavigation.map((item) => (
                 <li key={item.name}>
@@ -108,6 +115,36 @@ export default function Layout() {
               ))}
             </ul>
           </nav>
+
+          {/* Mobile User info and logout */}
+          <div className="p-4 border-t border-sidebar-border">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                  <span className="text-sm font-medium text-primary">
+                    {user?.username?.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-sidebar-foreground">
+                    {user?.username}
+                  </p>
+                  <p className="text-xs text-sidebar-foreground/70 capitalize">
+                    {user?.role}
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="w-full justify-start text-sidebar-foreground border-sidebar-border hover:bg-sidebar-accent"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
