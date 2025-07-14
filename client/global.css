@@ -292,4 +292,18 @@
   .admin-feature-item {
     @apply flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-muted/30 to-muted/20 border border-border/20 hover:border-border/40 transition-all duration-300 hover:shadow-sm text-sm font-medium;
   }
+
+  /* Dashboard Theme */
+  .dashboard-action-btn {
+    background: linear-gradient(
+      to right,
+      hsl(var(--primary)),
+      hsl(var(--primary) / 0.9)
+    );
+    @apply text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 font-semibold border-0 hover:scale-105;
+  }
+
+  .dashboard-secondary-btn {
+    @apply border-2 border-primary/20 bg-background hover:bg-primary/5 text-primary hover:text-primary/90 font-semibold hover:border-primary/40 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:scale-105;
+  }
 }
