@@ -284,8 +284,8 @@ export default function UserManagement() {
         >
           <Plus className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform duration-300" />
           Add User
-        </Button>
-            </div>
+                </Button>
+      </div>
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
