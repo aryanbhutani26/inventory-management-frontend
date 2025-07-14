@@ -170,10 +170,16 @@ export default function Layout() {
           <div className="p-4 border-t border-sidebar-border">
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-medium text-primary">
-                    {user?.username?.charAt(0).toUpperCase()}
-                  </span>
+                <div className="relative">
+                  <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-medium text-primary">
+                      {user?.username?.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div
+                    className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success rounded-full border-2 border-sidebar-background"
+                    title="Online"
+                  />
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-sidebar-foreground">
