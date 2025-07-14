@@ -76,6 +76,23 @@ export default function Layout() {
     item.roles.includes(user?.role || ""),
   );
 
+  // Add keyboard shortcut for logout (Ctrl+Shift+L or Cmd+Shift+L)
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.key === "L" &&
+        event.shiftKey &&
+        (event.ctrlKey || event.metaKey)
+      ) {
+        event.preventDefault();
+        handleLogoutClick();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile sidebar */}
