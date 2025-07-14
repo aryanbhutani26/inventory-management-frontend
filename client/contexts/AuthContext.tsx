@@ -54,8 +54,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
+    try {
+      // Clear user state
+      setUser(null);
+
+      // Clear localStorage
+      localStorage.removeItem("user");
+
+      // Clear any other session data if needed
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("sessionId");
+
+      // Clear sessionStorage as well
+      sessionStorage.clear();
+
+      console.log("User logged out successfully");
+    } catch (error) {
+      console.error("Error during logout:", error);
+      // Force clear even if there's an error
+      setUser(null);
+      localStorage.clear();
+    }
   };
 
   const value = {
